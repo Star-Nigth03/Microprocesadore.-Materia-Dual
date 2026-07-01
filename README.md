@@ -14,6 +14,46 @@ Por ahora el sistema no esta enfocado en el diseno visual. La parte que se traba
 - JavaScript
 - Gradle
 
+## Dependencias y requisitos para ejecutar el proyecto
+
+Para que otra persona pueda correr el proyecto en su equipo, necesita tener instalado lo siguiente:
+
+- Java 25
+- MySQL
+- Gradle Wrapper incluido en el proyecto
+
+Las dependencias principales del backend ya estan declaradas en `build.gradle.kts`:
+
+- `spring-boot-starter-actuator`
+- `spring-boot-starter-data-r2dbc`
+- `spring-boot-starter-security`
+- `spring-boot-starter-validation`
+- `spring-boot-starter-webflux`
+- `reactor-kotlin-extensions`
+- `kotlin-reflect`
+- `kotlinx-coroutines-reactor`
+- `jackson-module-kotlin`
+- `mysql-connector-j`
+- `r2dbc-mysql`
+
+Dependencias de prueba:
+
+- `spring-boot-starter-actuator-test`
+- `spring-boot-starter-data-r2dbc-test`
+- `spring-boot-starter-security-test`
+- `spring-boot-starter-validation-test`
+- `spring-boot-starter-webflux-test`
+- `kotlin-test-junit5`
+- `kotlinx-coroutines-test`
+- `h2`
+- `r2dbc-h2`
+- `junit-platform-launcher`
+
+Tambien se deben definir estas variables de entorno antes de ejecutar la aplicacion:
+
+- `DB_USERNAME`
+- `DB_PASSWORD`
+
 ## Que hace el sistema actualmente
 
 El sistema ya cuenta con una primera version funcional para:
