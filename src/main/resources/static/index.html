@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestion escolar</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main>
+    <h1>Gestion escolar</h1>
+
+    <section>
+        <h2>Alumnos</h2>
+        <form id="alumno-form">
+            <input type="hidden" id="alumno-id">
+            <input id="alumno-matricula" placeholder="Matricula" required>
+            <input id="alumno-nombre" placeholder="Nombre" required>
+            <input id="alumno-email" placeholder="Email" type="email">
+            <button type="submit">Guardar alumno</button>
+            <button type="button" id="alumno-cancel">Cancelar</button>
+        </form>
+        <table>
+            <thead>
+            <tr><th>Matricula</th><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="alumnos-table"></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Materias</h2>
+        <form id="materia-form">
+            <input type="hidden" id="materia-id">
+            <input id="materia-clave" placeholder="Clave" required>
+            <input id="materia-nombre" placeholder="Nombre" required>
+            <input id="materia-creditos" placeholder="Creditos" type="number" min="1" required>
+            <button type="submit">Guardar materia</button>
+            <button type="button" id="materia-cancel">Cancelar</button>
+        </form>
+        <table>
+            <thead>
+            <tr><th>Clave</th><th>Nombre</th><th>Creditos</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="materias-table"></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Inscripciones y calificaciones</h2>
+        <form id="inscripcion-form">
+            <select id="inscripcion-alumno" required></select>
+            <select id="inscripcion-materia" required></select>
+            <button type="submit">Inscribir</button>
+        </form>
+
+        <label for="historial-alumno">Alumno</label>
+        <select id="historial-alumno"></select>
+        <button type="button" id="load-historial">Consultar historial</button>
+
+        <div id="alumno-resumen"></div>
+        <table>
+            <thead>
+            <tr><th>Materia</th><th>Creditos</th><th>Calificacion</th><th>Estado</th><th>Accion</th></tr>
+            </thead>
+            <tbody id="historial-table"></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Estadisticas</h2>
+        <button type="button" id="load-estadisticas">Actualizar estadisticas</button>
+        <div id="estadisticas"></div>
+    </section>
+
+    <section>
+        <h2>Alumnos con riesgo academico</h2>
+        <button type="button" id="load-riesgo">Actualizar riesgo</button>
+        <table>
+            <thead>
+            <tr><th>Matricula</th><th>Nombre</th><th>Promedio</th><th>Materias</th><th>Aprobadas</th></tr>
+            </thead>
+            <tbody id="riesgo-table"></tbody>
+        </table>
+    </section>
+
+    <p id="mensaje" role="status"></p>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
