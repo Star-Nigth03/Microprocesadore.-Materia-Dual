@@ -16,7 +16,7 @@ Por ahora el sistema no esta enfocado en el diseno visual. La parte que se traba
 
 ## Dependencias y requisitos para ejecutar el proyecto
 
-Para que otra persona pueda correr el proyecto en su equipo, necesita tener instalado lo siguiente:
+Para el que desee correr el proyecto en su equipo, necesita tener instalado lo siguiente:
 
 - Java 25
 - MySQL
