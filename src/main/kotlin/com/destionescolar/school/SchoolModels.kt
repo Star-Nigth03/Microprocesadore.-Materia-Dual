@@ -3,7 +3,6 @@ package com.destionescolar.school
 import jakarta.validation.constraints.DecimalMax
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 
 data class Alumno(
@@ -23,13 +22,13 @@ data class Materia(
     val id: Long? = null,
     val clave: String,
     val nombre: String,
-    val creditos: Int,
+    val horario: String,
 )
 
 data class SolicitudMateria(
     @field:NotBlank val clave: String,
     @field:NotBlank val nombre: String,
-    @field:Min(1) val creditos: Int,
+    @field:NotBlank val horario: String,
 )
 
 data class SolicitudInscripcion(
@@ -38,7 +37,7 @@ data class SolicitudInscripcion(
 )
 
 data class SolicitudCalificacion(
-    @field:DecimalMin("0.0") @field:DecimalMax("100.0") val calificacion: Double,
+    @field:DecimalMin("0.0") @field:DecimalMax("10.0") val calificacion: Double,
 )
 
 data class DetalleInscripcion(
@@ -47,7 +46,7 @@ data class DetalleInscripcion(
     val materiaId: Long,
     val materiaClave: String,
     val materiaNombre: String,
-    val creditos: Int,
+    val horario: String,
     val calificacion: Double?,
     val aprobada: Boolean,
 )

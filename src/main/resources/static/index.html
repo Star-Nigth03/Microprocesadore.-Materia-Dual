@@ -3,88 +3,217 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gestion escolar</title>
+    <title>Campus Academico</title>
+    <link rel="icon" type="image/png" href="/campus-logo.png">
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<main>
-    <h1>Gestion escolar</h1>
+<main class="app-shell">
+    <section id="login-view" class="login-view" aria-labelledby="login-title">
+        <div class="login-copy">
+            <img class="brand-logo" src="/campus-logo.png" alt="Logo de Campus Academico">
+            <p class="eyebrow">Preparatoria</p>
+            <h1 id="login-title">Campus Academico</h1>
+            <p class="subtitle">Sistema Integral de Administracion Escolar</p>
+            <p class="lead">La plataforma permite administrar alumnos, profesores, materias, calificaciones e historiales.</p>
+            <ul class="feature-list" aria-label="Funciones principales">
+                <li>Gestion de alumnos</li>
+                <li>Gestion de materias</li>
+                <li>Historial academico</li>
+                <li>Estadisticas inteligentes</li>
+            </ul>
+        </div>
 
-    <section>
-        <h2>Alumnos</h2>
-        <form id="alumno-form">
-            <input type="hidden" id="alumno-id">
-            <input id="alumno-matricula" placeholder="Matricula" required>
-            <input id="alumno-nombre" placeholder="Nombre" required>
-            <input id="alumno-email" placeholder="Email" type="email">
-            <button type="submit">Guardar alumno</button>
-            <button type="button" id="alumno-cancel">Cancelar</button>
-        </form>
-        <table>
-            <thead>
-            <tr><th>Matricula</th><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="alumnos-table"></tbody>
-        </table>
+        <div class="role-grid" aria-label="Seleccion de rol">
+            <button type="button" class="role-card role-card-profesor" data-role="profesor">
+                <span class="role-icon" aria-hidden="true">Pr</span>
+                <span>
+                    <strong>Profesor</strong>
+                    <small>Gestion de alumnos, materias y calificaciones</small>
+                </span>
+            </button>
+            <button type="button" class="role-card role-card-alumno" data-role="alumno">
+                <span class="role-icon" aria-hidden="true">Al</span>
+                <span>
+                    <strong>Alumno</strong>
+                    <small>Consulta de historial y avance academico</small>
+                </span>
+            </button>
+        </div>
+
+        <footer class="login-footer">
+            <span>©2026</span>
+            <strong>Universidad Tecnologica de Mexico</strong>
+        </footer>
     </section>
 
-    <section>
-        <h2>Materias</h2>
-        <form id="materia-form">
-            <input type="hidden" id="materia-id">
-            <input id="materia-clave" placeholder="Clave" required>
-            <input id="materia-nombre" placeholder="Nombre" required>
-            <input id="materia-creditos" placeholder="Creditos" type="number" min="1" required>
-            <button type="submit">Guardar materia</button>
-            <button type="button" id="materia-cancel">Cancelar</button>
-        </form>
-        <table>
-            <thead>
-            <tr><th>Clave</th><th>Nombre</th><th>Creditos</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="materias-table"></tbody>
-        </table>
+    <section id="dashboard-view" class="dashboard-view hidden" aria-labelledby="panel-title">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow" id="panel-role">Panel</p>
+                <h1 id="panel-title">Campus Academico</h1>
+            </div>
+            <button type="button" id="logout-btn" class="ghost-button">Cambiar acceso</button>
+        </header>
+
+        <nav class="tabs" aria-label="Secciones del panel">
+            <button type="button" class="tab active" data-tab="resumen">Resumen</button>
+            <button type="button" class="tab teacher-only" data-tab="alumnos">Alumnos</button>
+            <button type="button" class="tab teacher-only" data-tab="cursos">Cursos</button>
+            <button type="button" class="tab" data-tab="calificaciones">Calificaciones</button>
+            <button type="button" class="tab" data-tab="horarios">Horarios</button>
+        </nav>
+
+        <p id="mensaje" role="status" class="status-line"></p>
+
+        <section id="tab-resumen" class="panel-section active">
+            <div class="metrics-grid">
+                <article class="metric">
+                    <span>Total alumnos</span>
+                    <strong id="stat-alumnos">0</strong>
+                </article>
+                <article class="metric">
+                    <span>Cursos</span>
+                    <strong id="stat-materias">0</strong>
+                </article>
+                <article class="metric">
+                    <span>Inscripciones</span>
+                    <strong id="stat-inscripciones">0</strong>
+                </article>
+                <article class="metric warning">
+                    <span>Riesgo academico</span>
+                    <strong id="stat-riesgo">0</strong>
+                </article>
+            </div>
+
+            <div class="content-grid">
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Materias de preparatoria</p>
+                            <h2>Catalogo sugerido</h2>
+                        </div>
+                        <button type="button" id="seed-subjects" class="primary-button teacher-only">Agregar materias base</button>
+                    </div>
+                    <div id="subject-chips" class="chip-list"></div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Seguimiento</p>
+                            <h2>Alumnos con riesgo academico</h2>
+                        </div>
+                        <button type="button" id="load-riesgo" class="ghost-button teacher-only">Actualizar</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr><th>Matricula</th><th>Alumno</th><th>Promedio</th><th>Materias</th></tr>
+                            </thead>
+                            <tbody id="riesgo-table"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="tab-alumnos" class="panel-section teacher-only">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Curso actual</p>
+                        <h2>Alumnos registrados</h2>
+                    </div>
+                </div>
+                <form id="alumno-form" class="form-grid">
+                    <input type="hidden" id="alumno-id">
+                    <label>Matricula<input id="alumno-matricula" placeholder="PRE-001" required></label>
+                    <label>Nombre<input id="alumno-nombre" placeholder="Nombre del alumno" required></label>
+                    <label>Email<input id="alumno-email" placeholder="alumno@correo.com" type="email"></label>
+                    <div class="form-actions">
+                        <button type="submit" class="primary-button">Guardar alumno</button>
+                        <button type="button" id="alumno-cancel" class="ghost-button">Cancelar</button>
+                    </div>
+                </form>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr><th>Matricula</th><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody id="alumnos-table"></tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
+        <section id="tab-cursos" class="panel-section teacher-only">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Cursos y alumnos inscritos</p>
+                        <h2>Materias</h2>
+                    </div>
+                </div>
+                <form id="materia-form" class="form-grid">
+                    <input type="hidden" id="materia-id">
+                    <label>Clave<input id="materia-clave" placeholder="MAT-1" required></label>
+                    <label>Materia<input id="materia-nombre" list="materias-base-list" placeholder="Matematicas" required></label>
+                    <label>Horario<input id="materia-horario" list="horarios-list" placeholder="Lunes a viernes | 07:00 - 07:50" required></label>
+                    <datalist id="materias-base-list"></datalist>
+                    <datalist id="horarios-list"></datalist>
+                    <div class="form-actions">
+                        <button type="submit" class="primary-button">Guardar curso</button>
+                        <button type="button" id="materia-cancel" class="ghost-button">Cancelar</button>
+                    </div>
+                </form>
+
+                <form id="inscripcion-form" class="inline-form">
+                    <label>Alumno<select id="inscripcion-alumno" required></select></label>
+                    <label>Curso<select id="inscripcion-materia" required></select></label>
+                    <button type="submit" class="primary-button">Inscribir</button>
+                </form>
+
+                <div id="courses-list" class="course-list"></div>
+            </article>
+        </section>
+
+        <section id="tab-calificaciones" class="panel-section">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Historial academico</p>
+                        <h2>Alumnos y calificaciones</h2>
+                    </div>
+                    <div class="selector-row">
+                        <select id="historial-alumno"></select>
+                        <button type="button" id="load-historial" class="ghost-button">Consultar</button>
+                    </div>
+                </div>
+                <div id="alumno-resumen" class="summary-strip"></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr><th>Materia</th><th>Horario</th><th>Calificacion</th><th>Estado</th><th class="teacher-only">Accion</th></tr>
+                        </thead>
+                        <tbody id="historial-table"></tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
+        <section id="tab-horarios" class="panel-section">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Horario escolar</p>
+                        <h2>Avance por alumno</h2>
+                    </div>
+                </div>
+                <div id="horarios-listado" class="schedule-grid"></div>
+            </article>
+        </section>
     </section>
-
-    <section>
-        <h2>Inscripciones y calificaciones</h2>
-        <form id="inscripcion-form">
-            <select id="inscripcion-alumno" required></select>
-            <select id="inscripcion-materia" required></select>
-            <button type="submit">Inscribir</button>
-        </form>
-
-        <label for="historial-alumno">Alumno</label>
-        <select id="historial-alumno"></select>
-        <button type="button" id="load-historial">Consultar historial</button>
-
-        <div id="alumno-resumen"></div>
-        <table>
-            <thead>
-            <tr><th>Materia</th><th>Creditos</th><th>Calificacion</th><th>Estado</th><th>Accion</th></tr>
-            </thead>
-            <tbody id="historial-table"></tbody>
-        </table>
-    </section>
-
-    <section>
-        <h2>Estadisticas</h2>
-        <button type="button" id="load-estadisticas">Actualizar estadisticas</button>
-        <div id="estadisticas"></div>
-    </section>
-
-    <section>
-        <h2>Alumnos con riesgo academico</h2>
-        <button type="button" id="load-riesgo">Actualizar riesgo</button>
-        <table>
-            <thead>
-            <tr><th>Matricula</th><th>Nombre</th><th>Promedio</th><th>Materias</th><th>Aprobadas</th></tr>
-            </thead>
-            <tbody id="riesgo-table"></tbody>
-        </table>
-    </section>
-
-    <p id="mensaje" role="status"></p>
 </main>
 <script src="/app.js"></script>
 </body>

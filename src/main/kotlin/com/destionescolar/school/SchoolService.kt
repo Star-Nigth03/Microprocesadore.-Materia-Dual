@@ -86,20 +86,20 @@ class ServicioEscolar(private val database: DatabaseClient) {
             .then()
 
     fun listarMaterias(): Flux<Materia> =
-        database.sql("select id, clave, nombre, creditos from materias where activa = true order by nombre")
+        database.sql("select id, clave, nombre, horario from materias where activa = true order by nombre")
             .map { row, _ -> row.aMateria() }
             .all()
 
     fun crearMateria(solicitud: SolicitudMateria): Mono<Materia> =
         database.sql(
             """
-            insert into materias (clave, nombre, creditos)
-            values (:clave, :nombre, :creditos)
+            insert into materias (clave, nombre, horario)
+            values (:clave, :nombre, :horario)
             """.trimIndent(),
         )
             .bind("clave", solicitud.clave.trim())
             .bind("nombre", solicitud.nombre.trim())
-            .bind("creditos", solicitud.creditos)
+            .bind("horario", solicitud.horario.trim())
             .fetch()
             .rowsUpdated()
             .then(buscarMateriaPorClave(solicitud.clave.trim()))
@@ -111,14 +111,14 @@ class ServicioEscolar(private val database: DatabaseClient) {
         database.sql(
             """
             update materias
-            set clave = :clave, nombre = :nombre, creditos = :creditos
+            set clave = :clave, nombre = :nombre, horario = :horario
             where id = :id
             """.trimIndent(),
         )
             .bind("id", id)
             .bind("clave", solicitud.clave.trim())
             .bind("nombre", solicitud.nombre.trim())
-            .bind("creditos", solicitud.creditos)
+            .bind("horario", solicitud.horario.trim())
             .fetch()
             .rowsUpdated()
             .flatMap { actualizados ->
@@ -244,14 +244,14 @@ class ServicioEscolar(private val database: DatabaseClient) {
             .one()
 
     private fun buscarMateriaPorId(id: Long): Mono<Materia> =
-        database.sql("select id, clave, nombre, creditos from materias where id = :id and activa = true")
+        database.sql("select id, clave, nombre, horario from materias where id = :id and activa = true")
             .bind("id", id)
             .map { row, _ -> row.aMateria() }
             .one()
             .switchIfEmpty(Mono.error(noEncontrado("Materia no encontrada")))
 
     private fun buscarMateriaPorClave(clave: String): Mono<Materia> =
-        database.sql("select id, clave, nombre, creditos from materias where clave = :clave")
+        database.sql("select id, clave, nombre, horario from materias where clave = :clave")
             .bind("clave", clave)
             .map { row, _ -> row.aMateria() }
             .one()
@@ -327,7 +327,7 @@ class ServicioEscolar(private val database: DatabaseClient) {
                i.materia_id,
                m.clave as materia_clave,
                m.nombre as materia_nombre,
-               m.creditos,
+               m.horario,
                c.calificacion,
                i.estado
         from inscripciones i
@@ -340,7 +340,7 @@ class ServicioEscolar(private val database: DatabaseClient) {
     private fun noEncontrado(mensaje: String) = ResponseStatusException(HttpStatus.NOT_FOUND, mensaje)
 
     companion object {
-        const val CALIFICACION_APROBATORIA = 70.0
+        const val CALIFICACION_APROBATORIA = 6.0
     }
 }
 
@@ -360,7 +360,7 @@ private fun io.r2dbc.spi.Row.aMateria() = Materia(
     id = get("id", java.lang.Long::class.java)?.toLong(),
     clave = get("clave", String::class.java).orEmpty(),
     nombre = get("nombre", String::class.java).orEmpty(),
-    creditos = get("creditos", java.lang.Integer::class.java)?.toInt() ?: 0,
+    horario = get("horario", String::class.java).orEmpty(),
 )
 
 private fun io.r2dbc.spi.Row.aDetalleInscripcion(): DetalleInscripcion {
@@ -372,7 +372,7 @@ private fun io.r2dbc.spi.Row.aDetalleInscripcion(): DetalleInscripcion {
         materiaId = get("materia_id", java.lang.Long::class.java)?.toLong() ?: 0,
         materiaClave = get("materia_clave", String::class.java).orEmpty(),
         materiaNombre = get("materia_nombre", String::class.java).orEmpty(),
-        creditos = get("creditos", java.lang.Integer::class.java)?.toInt() ?: 0,
+        horario = get("horario", String::class.java).orEmpty(),
         calificacion = calificacion,
         aprobada = estado == "APROBADA" || (calificacion != null && calificacion >= ServicioEscolar.CALIFICACION_APROBATORIA),
     )

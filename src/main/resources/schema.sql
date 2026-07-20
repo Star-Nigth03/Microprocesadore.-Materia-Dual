@@ -36,11 +36,13 @@ create table if not exists materias (
     id bigint primary key auto_increment,
     clave varchar(30) not null unique,
     nombre varchar(120) not null,
-    creditos int not null,
+    horario varchar(180) not null,
     semestre_recomendado int,
     activa boolean not null default true,
     created_at timestamp not null default current_timestamp
 );
+
+alter table materias add column if not exists horario varchar(180) not null default 'Horario por asignar';
 
 create table if not exists periodos (
     id bigint primary key auto_increment,
@@ -72,7 +74,7 @@ create table if not exists calificaciones (
     created_at timestamp not null default current_timestamp,
     updated_at timestamp null default null on update current_timestamp,
     constraint fk_calificaciones_inscripciones foreign key (inscripcion_id) references inscripciones(id) on delete cascade,
-    constraint chk_calificacion check (calificacion >= 0 and calificacion <= 100)
+    constraint chk_calificacion check (calificacion >= 0 and calificacion <= 10)
 );
 
 create table if not exists metricas_academicas (
